@@ -1,6 +1,8 @@
 const { getPerson } = require('./dataHelpers');
 const request = require('supertest');
 const app = require('../lib/app');
+const Person = require('../lib/models/Person');
+const Dog = require('../lib/models/Dog');
 
 describe('person routes', () => {
   it('creates and returns a person', () => {
@@ -39,14 +41,24 @@ describe('person routes', () => {
   });
 
   it('returns a person by their id', async() => {
-    const { _id, name, email } = await getPerson();
+    const { _id, name, email } = await Person.create({ name: 'obiwan', email: 'obiwan@test.com' });
+    const dogs = await Dog.create([
+      { name: 'spot', age: 5, weight: '20 lbs', owner: _id },
+      { name: 'rover', age: 10, weight: '50 lbs', owner: _id },
+    ]);
+
     return request(app)
       .get(`/api/v1/people/${_id}`)
       .then(res => {
+        const dogsJSON = JSON.parse(JSON.stringify(dogs));
+        dogsJSON.forEach(dog => {
+          expect(res.body.dogs).toContainEqual(dog);
+        });
         expect(res.body).toEqual(expect.objectContaining({
-          _id,
+          _id: _id.toString(),
           name,
           email,
+          dogs: expect.any(Array),
           __v: 0
         }));
       });
