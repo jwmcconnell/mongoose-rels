@@ -2,7 +2,7 @@ const { getPerson } = require('./dataHelpers');
 const request = require('supertest');
 const app = require('../lib/app');
 
-describe('app routes', () => {
+describe('person routes', () => {
   it('creates and returns a person', () => {
     return request(app)
       .post('/api/v1/people')
