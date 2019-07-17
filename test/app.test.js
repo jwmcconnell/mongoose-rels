@@ -38,7 +38,7 @@ describe('app routes', () => {
       });
   });
 
-  it('returns a person by their id', async () => {
+  it('returns a person by their id', async() => {
     const { _id, name, email } = await getPerson();
     return request(app)
       .get(`/api/v1/people/${_id}`)
@@ -52,7 +52,7 @@ describe('app routes', () => {
       });
   });
 
-  it('updates a user and returns the user', async () => {
+  it('updates a user and returns the user', async() => {
     const { _id } = await getPerson();
     return request(app)
       .put(`/api/v1/people/${_id}`)
@@ -73,6 +73,20 @@ describe('app routes', () => {
           profileImage: 'profileimage.com/image.jpg',
           __v: 0
         });
+      });
+  });
+
+  it('deletes a user and returns the user', async() => {
+    const { _id, name, email } = await getPerson();
+    return request(app)
+      .delete(`/api/v1/people/${_id}`)
+      .then(res => {
+        expect(res.body).toEqual(expect.objectContaining({
+          _id: expect.any(String),
+          name,
+          email,
+          __v: 0
+        }));
       });
   });
 });
