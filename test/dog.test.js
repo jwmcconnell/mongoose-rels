@@ -19,4 +19,12 @@ describe('dog routes', () => {
         });
       });
   });
+
+  it('returns all dogs', () => {
+    return request(app)
+      .get('/api/v1/dogs')
+      .then(res => {
+        expect(res.body).toEqual(expect.any(Array));
+      });
+  });
 });
