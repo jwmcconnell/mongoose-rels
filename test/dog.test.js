@@ -73,4 +73,20 @@ describe('dog routes', () => {
         });
       });
   });
+
+  it('deletes and returns the deleted dog', async() => {
+    const { _id } = await getDog();
+    return request(app)
+      .delete(`/api/v1/dogs/${_id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          name: expect.any(String),
+          age: expect.any(Number),
+          weight: expect.any(String),
+          owner: expect.any(String),
+          __v: 0
+        });
+      });
+  });
 });
