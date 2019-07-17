@@ -46,7 +46,12 @@ describe('dog routes', () => {
           name: expect.any(String),
           age: expect.any(Number),
           weight: expect.any(String),
-          owner: expect.any(String),
+          owner: expect.objectContaining({
+            _id: expect.any(String),
+            name: expect.any(String),
+            email: expect.any(String),
+            __v: 0
+          }),
           __v: 0
         });
       });
