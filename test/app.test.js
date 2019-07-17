@@ -1,4 +1,4 @@
-require('./dataHelpers');
+const { getPerson } = require('./dataHelpers');
 const request = require('supertest');
 const app = require('../lib/app');
 
@@ -29,14 +29,26 @@ describe('app routes', () => {
       .get('/api/v1/people')
       .then(res => {
         expect(res.body).toEqual(expect.any(Array));
-        expect(res.body[0]).toEqual({
+        expect(res.body[0]).toEqual(expect.objectContaining({
           _id: expect.any(String),
           name: expect.any(String),
           email: expect.any(String),
-          city: expect.any(String),
-          state: expect.any(String),
           __v: 0
-        });
+        }));
+      });
+  });
+
+  it('returns a person by their id', async() => {
+    const { _id, name, email } = await getPerson();
+    return request(app)
+      .get(`/api/v1/people/${_id}`)
+      .then(res => {
+        expect(res.body).toEqual(expect.objectContaining({
+          _id,
+          name,
+          email,
+          __v: 0
+        }));
       });
   });
 });
