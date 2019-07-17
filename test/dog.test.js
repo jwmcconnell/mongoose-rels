@@ -51,4 +51,26 @@ describe('dog routes', () => {
         });
       });
   });
+
+  it('updates and returns the updated dog', async() => {
+    const { _id, owner } = await getDog();
+    return request(app)
+      .put(`/api/v1/dogs/${_id}`)
+      .send({
+        name: 'updated-name',
+        age: 1,
+        weight: '100 lbs',
+        owner
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id,
+          name: 'updated-name',
+          age: 1,
+          weight: '100 lbs',
+          owner,
+          __v: 0
+        });
+      });
+  });
 });
